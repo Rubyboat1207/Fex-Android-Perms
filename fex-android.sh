@@ -63,10 +63,9 @@ function termux_install
     echo -e "\e[32m[+] Extracting Ubuntu 22.04.3 LTS RootFS...\e[0m"
     tar -xf ubuntu.tar.xz
 
-    # this is a bit of a hack to get this working on modern android
-    mkdir -p ubuntu-fs64/etc/dpkg/dpkg.cfg.d/
-    echo "force-unsafe-io" > ubuntu-fs64/etc/dpkg/dpkg.cfg.d/force-unsafe-io
-    ln -sf /dev/null ubuntu-fs64/var/lib/dpkg/status-old
+    rm -f ubuntu-fs64/var/lib/dpkg/status-old
+    touch ubuntu-fs64/var/lib/dpkg/status-old
+    
 
 
     mkdir -p patch
@@ -128,6 +127,7 @@ export MESA_LOADER_DRIVER_OVERRIDE=zink
 export GALLIUM_DRIVER=zink
 export ZINK_DESCRIPTORS=lazy
 export PULSE_SERVER=127.0.0.1
+export PROOT_NO_SECCOMP=1
 export DXVK_HUD="devinfo,fps,api,version,gpuload"
 export DXVK_ASYNC=1
 SHELL=/bin/bash
