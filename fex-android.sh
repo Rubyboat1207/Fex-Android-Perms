@@ -74,6 +74,9 @@ function termux_install
     echo -e "\e[32m[+] installation is complete\e[0m"
     echo -e "Type \e[31mfex\e[0m command to run"
     rm ubuntu.tar.xz
+
+    # Create local tmp dir to avoid /tmp permission issues in container
+    mkdir -p "$INSTALL_DIR/tmp"
     
     echo -e "\e[32m[+] Applying full permissions to install directory...\e[0m"
     chmod -R 777 "$INSTALL_DIR"
@@ -132,7 +135,8 @@ cmd+=" -b /dev"
 cmd+=" -b /proc"
 cmd+=" -b /sys"
 cmd+=" -b ubuntu-fs64/root:/dev/shm"
-cmd+=" -b $PREFIX/tmp:/tmp"
+# Bind local tmp instead of system tmp to fix permission errors
+cmd+=" -b $INSTALL_DIR/tmp:/tmp"
 cmd+=" -b /sdcard"
 cmd+=" -w /root"
 cmd+=" /bin/FEXInterpreter"
@@ -148,11 +152,11 @@ EOF
 if [ ! -d /dev/shm ]; then
     sudo mkdir -p /dev/shm
 fi
-sudo rm -r "$PREFIX/tmp/.wine*" 2>/dev/null
+sudo rm -r "$INSTALL_DIR/tmp/.wine*" 2>/dev/null
 sudo mount --bind /proc ubuntu-fs64/proc
 sudo mount --bind /dev ubuntu-fs64/dev
 sudo mount --bind /sys ubuntu-fs64/sys
-sudo mount --bind "$PREFIX/tmp" ubuntu-fs64/tmp
+sudo mount --bind "$INSTALL_DIR/tmp" ubuntu-fs64/tmp
 sudo mount -t devpts devpts ubuntu-fs64/dev/pts
 sudo mount --bind /sdcard ubuntu-fs64/sdcard
 sudo chown root:root ubuntu-fs64/root/.wine
