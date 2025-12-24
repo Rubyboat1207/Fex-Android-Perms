@@ -74,6 +74,9 @@ function termux_install
     echo -e "\e[32m[+] installation is complete\e[0m"
     echo -e "Type \e[31mfex\e[0m command to run"
     rm ubuntu.tar.xz
+    
+    echo -e "\e[32m[+] Applying full permissions to install directory...\e[0m"
+    chmod -R 777 "$INSTALL_DIR"
 }
 
 function fexinstall()
