@@ -7,7 +7,7 @@ fex="FEX-Android Installation"
 INSTALL_DIR=""
 
 function pick_install_dir() {
-    INSTALL_DIR=$(dialog --title "$fex" --inputbox "Enter installation directory:" 10 50 "$HOME/Fex-Android" 3>&1 1>&2 2>&3)
+    INSTALL_DIR=$(dialog --title "$fex" --inputbox "Enter installation directory:" 10 50 "$PREFIX/var/lib/Fex-Android" 3>&1 1>&2 2>&3)
     exit_status=$?
     if [ $exit_status -ne 0 ]; then
         clear
