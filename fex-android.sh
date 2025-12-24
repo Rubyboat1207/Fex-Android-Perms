@@ -62,6 +62,13 @@ function termux_install
     wget https://github.com/AllPlatform/Fex-Android/releases/download/v1.3-update/ubuntu.tar.xz -O ubuntu.tar.xz
     echo -e "\e[32m[+] Extracting Ubuntu 22.04.3 LTS RootFS...\e[0m"
     tar -xf ubuntu.tar.xz
+
+    # this is a bit of a hack to get this working on modern android
+    mkdir -p ubuntu-fs64/etc/dpkg/dpkg.cfg.d/
+    echo "force-unsafe-io" > ubuntu-fs64/etc/dpkg/dpkg.cfg.d/force-unsafe-io
+    ln -sf /dev/null ubuntu-fs64/var/lib/dpkg/status-old
+
+
     mkdir -p patch
     echo -e "\e[32m[+] Downloading update patch...\e[0m"
     wget https://github.com/AllPlatform/Fex-Android/raw/main/patch/fex-emu-armv8.4_2403.1~j_arm64.deb -O patch/update.deb
